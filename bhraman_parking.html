@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parking — Explore North India</title>
+<style>
+  :root{
+    --sky-top:#0d4d8f;
+    --sky-bottom:#3a8dd6;
+    --accent-green:#a8d92e;
+    --card-blue:#cfeaf5;
+    --teal-ring:#3aa7a0;
+    --text-dark:#1b2a3a;
+    --white:#ffffff;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --font-head:'Baloo 2','Segoe UI',sans-serif;
+    --font-body:'Poppins','Segoe UI',sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--font-body);color:var(--text-dark);background:#eef7fb;}
+  img{max-width:100%;display:block;}
+
+  /* ===== HEADER (shared) ===== */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 48px;
+    background:linear-gradient(180deg,#e9f7fb 0%,#dff0f7 100%);
+    border-radius:0 0 40px 40px;
+    position:relative;z-index:20;
+  }
+  .logo{display:flex;align-items:center;gap:12px;font-family:var(--font-head);font-weight:700;}
+  .logo-badge{
+    width:56px;height:56px;border-radius:50%;background:var(--white);
+    border:3px solid var(--teal-ring);display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .logo-badge img{width:100%;height:100%;object-fit:cover;}
+  nav ul{list-style:none;display:flex;gap:32px;}
+  nav a{text-decoration:none;color:var(--text-dark);font-weight:600;letter-spacing:.3px;font-size:15px;transition:color .2s;}
+  nav a:hover, nav a.active{ color:var(--teal-ring); }
+  .ministry{display:flex;align-items:center;gap:10px;}
+  .ministry-text{font-size:11px;line-height:1.2;color:var(--text-dark);}
+  .ministry-text strong{font-size:14px;display:block;}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger span{width:26px;height:3px;background:var(--text-dark);border-radius:2px;}
+
+  /* ===== PAGE HERO ===== */
+  .page-hero{
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(13,77,143,.62) 0%, rgba(58,141,214,.4) 55%, rgba(58,141,214,0) 100%),
+      url('C:/Users/KUNAL/Downloads/images/background_web.png') center/cover no-repeat;
+    min-height:320px;
+    padding:64px 48px 40px;
+    color:var(--white);
+    text-align:center;
+  }
+  .page-hero h1{
+    font-family:var(--font-head);
+    font-size:clamp(26px,3.8vw,48px);
+    text-transform:uppercase;
+    text-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  .page-hero h1 .accent{ color:var(--accent-green); }
+  .page-hero p{
+    margin-top:14px;
+    font-size:clamp(14px,1.3vw,17px);
+    font-weight:500;
+    text-shadow:0 1px 6px rgba(0,0,0,.35);
+    max-width:640px;margin-left:auto;margin-right:auto;
+  }
+
+  /* ===== SEARCH PANEL ===== */
+  .search-panel{
+    max-width:1080px;
+    margin:-46px auto 0;
+    position:relative;
+    z-index:5;
+    background:var(--white);
+    border-radius:26px;
+    box-shadow:0 16px 36px rgba(20,50,70,.2);
+    padding:22px 26px;
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr 1fr auto;
+    gap:14px;
+    align-items:end;
+  }
+  .field label{
+    display:block;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.5px;
+    color:#2b6fa3;
+    margin-bottom:6px;
+    text-transform:uppercase;
+  }
+  .field select, .field input{
+    width:100%;
+    border:2px solid #d9ecf3;
+    border-radius:14px;
+    padding:11px 14px;
+    font-family:var(--font-body);
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--text-dark);
+    background:#f6fbfd;
+    outline:none;
+    transition:border-color .2s;
+  }
+  .field select:focus, .field input:focus{ border-color:var(--teal-ring); }
+  .find-btn{
+    background:var(--accent-green);
+    border:none;
+    padding:12px 28px;
+    border-radius:16px;
+    font-family:var(--font-head);
+    font-weight:700;
+    font-size:14.5px;
+    color:var(--text-dark);
+    cursor:pointer;
+    white-space:nowrap;
+    transition:transform .15s;
+  }
+  .find-btn:hover{ transform:translateY(-2px); }
+
+  /* ===== TOOLBAR ===== */
+  .toolbar{
+    max-width:1300px;
+    margin:34px auto 0;
+    padding:0 48px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .result-count{font-size:13px;font-weight:600;color:#33465a;}
+  .chip-group{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{
+    border:2px solid #cfeaf5;
+    background:var(--white);
+    padding:8px 16px;
+    border-radius:30px;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--text-dark);
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .chip:hover{ border-color:var(--teal-ring); }
+  .chip.active{
+    background:var(--teal-ring);
+    border-color:var(--teal-ring);
+    color:var(--white);
+  }
+
+  /* ===== PARKING GRID ===== */
+  .parking-section{
+    padding:22px 48px 90px;
+    max-width:1300px;
+    margin:0 auto;
+  }
+  .parking-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:26px;
+  }
+  .lot-card{
+    background:var(--card-blue);
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    border:6px solid var(--white);
+    box-shadow:0 12px 30px rgba(20,50,70,.15);
+    display:flex;
+    flex-direction:column;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .lot-card:hover{ transform:translateY(-6px); box-shadow:0 18px 36px rgba(20,50,70,.24); }
+  .lot-card .img-wrap{ position:relative; height:170px; flex-shrink:0; }
+  .lot-card .img-wrap img{width:100%;height:100%;object-fit:cover;}
+  .cover-tag{
+    position:absolute; top:14px; left:14px;
+    background:rgba(27,42,58,.75); color:var(--white);
+    font-size:10.5px; font-weight:700; padding:5px 12px;
+    border-radius:16px; letter-spacing:.4px;
+  }
+  .dist-tag{
+    position:absolute; top:14px; right:14px;
+    background:var(--white); color:var(--text-dark);
+    font-size:11px; font-weight:800; padding:6px 13px;
+    border-radius:20px; box-shadow:0 4px 10px rgba(0,0,0,.15);
+  }
+  .lot-card .content{ padding:18px 20px 22px; flex:1; display:flex; flex-direction:column; }
+  .lot-card h3{ font-family:var(--font-head); font-size:18.5px; margin-bottom:3px; }
+  .lot-location{
+    font-size:12px; font-weight:700; color:#2b6fa3;
+    display:flex; align-items:center; gap:5px; margin-bottom:12px;
+  }
+  .lot-location svg{width:12px;height:12px;flex-shrink:0;}
+
+  .security-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .sec-pill{
+    background:rgba(58,167,160,.15); color:#1b6b64;
+    font-size:10.5px; font-weight:700; padding:5px 11px; border-radius:14px;
+    display:flex; align-items:center; gap:4px;
+  }
+  .sec-pill svg{width:11px;height:11px;}
+
+  .slots-block{ margin-bottom:14px; }
+  .slots-label{
+    display:flex; justify-content:space-between;
+    font-size:11.5px; font-weight:700; color:#33465a; margin-bottom:6px;
+  }
+  .slots-label .num{ font-weight:800; }
+  .slots-label .num.low{ color:#c0392b; }
+  .slots-label .num.mid{ color:#c47f14; }
+  .slots-label .num.high{ color:#2b8a3e; }
+  .slot-bar{
+    width:100%; height:8px; border-radius:6px;
+    background:#e2eef3; overflow:hidden;
+  }
+  .slot-bar-fill{
+    height:100%; border-radius:6px;
+    transition:width .4s ease;
+  }
+
+  .lot-footer{
+    margin-top:auto;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .price{ font-family:var(--font-head); font-size:16.5px; color:var(--text-dark); }
+  .price span{ font-size:11px; font-weight:500; color:#5a6b7a; font-family:var(--font-body); }
+  .book-btn{
+    background:var(--teal-ring); color:var(--white); border:none;
+    padding:10px 20px; border-radius:30px; font-weight:700; font-size:12.5px;
+    cursor:pointer; transition:background .2s, opacity .2s;
+  }
+  .book-btn:hover{ background:#2e8983; }
+  .book-btn:disabled{ background:#9aa8b3; cursor:not-allowed; }
+
+  .no-results{ text-align:center; padding:60px 20px; font-style:italic; color:#5a6b7a; display:none; }
+
+  /* ===== MODAL ===== */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(13,30,45,.55);
+    display:none; align-items:center; justify-content:center;
+    padding:20px; z-index:100;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-box{
+    background:var(--white); border-radius:26px;
+    max-width:460px; width:100%;
+    padding:30px 28px 26px;
+    max-height:90vh; overflow-y:auto;
+    position:relative;
+    box-shadow:0 24px 60px rgba(0,0,0,.3);
+  }
+  .modal-close{
+    position:absolute; top:18px; right:18px;
+    background:#eef7fb; border:none; width:34px; height:34px;
+    border-radius:50%; cursor:pointer; font-size:16px; color:var(--text-dark);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-box h2{ font-family:var(--font-head); font-size:21px; margin-bottom:4px; padding-right:30px; }
+  .modal-sub{ font-size:12.5px; color:#5a6b7a; margin-bottom:20px; }
+
+  .modal-field{ margin-bottom:14px; }
+  .modal-field label{
+    display:block; font-size:11px; font-weight:800; letter-spacing:.4px;
+    color:#2b6fa3; margin-bottom:6px; text-transform:uppercase;
+  }
+  .modal-field input, .modal-field select{
+    width:100%; border:2px solid #d9ecf3; border-radius:12px;
+    padding:10px 13px; font-family:var(--font-body); font-size:13.5px;
+    font-weight:600; color:var(--text-dark); background:#f6fbfd; outline:none;
+  }
+  .modal-field input:focus, .modal-field select:focus{ border-color:var(--teal-ring); }
+
+  .slot-time-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:6px; }
+  .time-chip{
+    border:2px solid #d9ecf3; background:#f6fbfd; border-radius:12px;
+    padding:9px 4px; text-align:center; font-size:12px; font-weight:700;
+    cursor:pointer; color:var(--text-dark); transition:all .15s;
+  }
+  .time-chip:hover{ border-color:var(--teal-ring); }
+  .time-chip.selected{ background:var(--teal-ring); border-color:var(--teal-ring); color:var(--white); }
+
+  .modal-summary{
+    background:#eef7fb; border-radius:16px; padding:14px 16px; margin:18px 0;
+    font-size:12.5px; line-height:1.7; color:#33465a;
+  }
+  .modal-summary strong{ color:var(--text-dark); }
+
+  .confirm-btn{
+    width:100%; background:var(--accent-green); border:none;
+    padding:13px; border-radius:16px; font-family:var(--font-head);
+    font-weight:700; font-size:15px; color:var(--text-dark);
+    cursor:pointer; transition:transform .15s;
+  }
+  .confirm-btn:hover{ transform:translateY(-2px); }
+  .confirm-btn:disabled{ background:#c9d6dc; cursor:not-allowed; transform:none; }
+
+  /* Booking confirmation state */
+  .confirm-view{ display:none; text-align:center; }
+  .confirm-view.show{ display:block; }
+  .form-view.hide{ display:none; }
+  .qr-box{
+    width:150px; height:150px; margin:10px auto 16px;
+    background:
+      repeating-linear-gradient(0deg, #1b2a3a 0 6px, transparent 6px 12px),
+      repeating-linear-gradient(90deg, #1b2a3a 0 6px, transparent 6px 12px);
+    background-blend-mode:multiply;
+    border:3px solid var(--text-dark);
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    background-color:#f2f7f9;
+  }
+  .qr-box span{
+    background:var(--white); padding:4px 8px; font-size:10px; font-weight:800;
+    border-radius:4px;
+  }
+  .booking-id{
+    font-family:var(--font-head); font-size:20px; letter-spacing:1px;
+    color:var(--teal-ring); margin-bottom:6px;
+  }
+  .success-tick{
+    width:56px; height:56px; border-radius:50%; background:var(--accent-green);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 14px;
+  }
+
+  footer{ background:var(--sky-top); color:var(--white); text-align:center; padding:26px; font-size:13px; }
+
+  @media (max-width:980px){
+    .search-panel{ grid-template-columns:1fr 1fr; }
+    .parking-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:720px){
+    nav{display:none;} .burger{display:flex;}
+    header{padding:16px 20px;}
+    .page-hero{padding:44px 20px 34px;}
+    .search-panel{ grid-template-columns:1fr; margin:-30px 16px 0; padding:18px; }
+    .toolbar{padding:0 20px;}
+    .parking-section{padding:16px 20px 60px;}
+    .parking-grid{grid-template-columns:1fr;}
+    .ministry-text{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge"><img src="C:/Users/KUNAL/Downloads/images/logo.png" alt="Site logo" onerror="this.style.display='none'"></div>
+  </div>
+
+  <nav id="mainNav">
+    <ul id="navList"></ul>
+  </nav>
+
+  <div class="ministry">
+    <div class="ministry-text"><strong>MINISTRY OF</strong>TOURISM</div>
+  </div>
+
+  <button class="burger" id="burgerBtn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<section class="page-hero">
+  <h1><span class="accent">Park Smart,</span> Travel Easy</h1>
+  <p>Reserve a verified parking slot near your destination in advance — no more circling the hill for a spot.</p>
+</section>
+
+<div class="search-panel">
+  <div class="field">
+    <label for="destSelect">Destination</label>
+    <select id="destSelect">
+      <option value="All">All Destinations</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="dateInput">Date</label>
+    <input type="date" id="dateInput">
+  </div>
+  <div class="field">
+    <label for="arriveInput">Arrival Time</label>
+    <input type="time" id="arriveInput" value="09:00">
+  </div>
+  <div class="field">
+    <label for="vehicleSelect">Vehicle Type</label>
+    <select id="vehicleSelect">
+      <option value="All">All Vehicles</option>
+      <option value="Car">Car</option>
+      <option value="Bike">Bike</option>
+      <option value="Bus">Bus / Tempo Traveller</option>
+    </select>
+  </div>
+  <button class="find-btn" id="findBtn">Find Parking</button>
+</div>
+
+<div class="toolbar">
+  <div class="result-count" id="resultCount"></div>
+  <div class="chip-group" id="chipGroup"></div>
+</div>
+
+<section class="parking-section">
+  <div class="parking-grid" id="parkingGrid"></div>
+  <p class="no-results" id="noResults">No parking lots match your filters. Try a different destination or vehicle type.</p>
+</section>
+
+<footer>
+  &copy; <span id="year"></span> Ministry of Tourism, Government of India — Explore North India
+</footer>
+
+<!-- ===== BOOKING MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">&times;</button>
+
+    <div class="form-view" id="formView">
+      <h2 id="modalLotName">Parking Lot</h2>
+      <p class="modal-sub" id="modalLotLocation">Location</p>
+
+      <div class="modal-field">
+        <label>Select Arrival Slot</label>
+        <div class="slot-time-grid" id="slotTimeGrid"></div>
+      </div>
+
+      <div class="modal-field">
+        <label for="durationSelect">Duration</label>
+        <select id="durationSelect">
+          <option value="2">2 Hours</option>
+          <option value="4">4 Hours</option>
+          <option value="8" selected>Full Day (8 Hours)</option>
+          <option value="24">24 Hours</option>
+        </select>
+      </div>
+
+      <div class="modal-field">
+        <label for="vehicleNumInput">Vehicle Number</label>
+        <input type="text" id="vehicleNumInput" placeholder="e.g. HP-01-AB-1234">
+      </div>
+
+      <div class="modal-field">
+        <label for="nameInput">Your Name</label>
+        <input type="text" id="nameInput" placeholder="Full name">
+      </div>
+
+      <div class="modal-summary" id="modalSummary"></div>
+
+      <button class="confirm-btn" id="confirmBtn">Confirm Booking</button>
+    </div>
+
+    <div class="confirm-view" id="confirmView">
+      <div class="success-tick">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#1b2a3a" stroke-width="3">
+          <polyline points="4,13 9,18 20,6"></polyline>
+        </svg>
+      </div>
+      <h2>Slot Reserved!</h2>
+      <p class="modal-sub">Show this QR code at the parking entry gate</p>
+      <div class="qr-box"><span>SCAN AT GATE</span></div>
+      <div class="booking-id" id="bookingIdText">PK-000000</div>
+      <div class="modal-summary" id="confirmSummary"></div>
+      <button class="confirm-btn" id="doneBtn">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DYNAMIC DATA
+   ============================================================ */
+const IMG_BASE = "C:/Users/KUNAL/Downloads/images/";
+
+const navItems = [
+  {label:"Home", href:"bhraman_home.html"},
+  {label:"Adventures", href:"bhraman_adventures.html"},
+  {label:"Rentals", href:"bhraman_rentals.html"},
+  {label:"Parking", href:"bhraman_parking.html"},
+  {label:"Guides", href:"bhraman_guides.html"},
+  {label:"About", href:"about.html"},
+  {label:"FAQ", href:"faq.html"}
+];
+const currentPage = "parking";
+
+const parkingLots = [
+  {
+    id:"MNL-01",
+    name:"Mall Road Multi-Level Parking",
+    destination:"Manali",
+    location:"200m from Mall Road, Manali",
+    distance:"200 m walk",
+    covered:true,
+    security:["CCTV","Guard","Lit at Night"],
+    totalSlots:80,
+    availableSlots:23,
+    pricePerHour:30,
+    pricePerDay:180,
+    vehicle:"Car",
+    image:"parking-manali-mall-road.jpg"
+  },
+  {
+    id:"MNL-02",
+    name:"Old Manali Riverside Lot",
+    destination:"Manali",
+    location:"Near Old Manali Bridge",
+    distance:"400 m walk",
+    covered:false,
+    security:["Guard"],
+    totalSlots:40,
+    availableSlots:4,
+    pricePerHour:20,
+    pricePerDay:120,
+    vehicle:"Bike",
+    image:"parking-manali-old-manali.jpg"
+  },
+  {
+    id:"SML-01",
+    name:"The Ridge Underground Parking",
+    destination:"Shimla",
+    location:"Below The Ridge, Shimla",
+    distance:"5 min walk",
+    covered:true,
+    security:["CCTV","Guard","EV Charging"],
+    totalSlots:120,
+    availableSlots:67,
+    pricePerHour:35,
+    pricePerDay:220,
+    vehicle:"Car",
+    image:"parking-shimla-ridge.jpg"
+  },
+  {
+    id:"SML-02",
+    name:"Lakkar Bazaar Open Lot",
+    destination:"Shimla",
+    location:"Lakkar Bazaar, Shimla",
+    distance:"10 min walk",
+    covered:false,
+    security:["CCTV"],
+    totalSlots:60,
+    availableSlots:0,
+    pricePerHour:25,
+    pricePerDay:150,
+    vehicle:"Bus",
+    image:"parking-shimla-lakkar-bazaar.jpg"
+  },
+  {
+    id:"NTL-01",
+    name:"Mallital Lakeview Parking",
+    destination:"Nainital",
+    location:"Near Naini Lake, Mallital",
+    distance:"3 min walk",
+    covered:false,
+    security:["CCTV","Guard"],
+    totalSlots:70,
+    availableSlots:31,
+    pricePerHour:25,
+    pricePerDay:160,
+    vehicle:"Car",
+    image:"parking-nainital-mallital.jpg"
+  },
+  {
+    id:"SRI-01",
+    name:"Dal Gate Covered Parking",
+    destination:"Srinagar",
+    location:"Dal Gate, near Dal Lake",
+    distance:"1 min walk",
+    covered:true,
+    security:["CCTV","Guard","Lit at Night"],
+    totalSlots:100,
+    availableSlots:52,
+    pricePerHour:20,
+    pricePerDay:140,
+    vehicle:"Car",
+    image:"parking-srinagar-dal-gate.jpg"
+  },
+  {
+    id:"GMG-01",
+    name:"Gulmarg Gondola Base Parking",
+    destination:"Gulmarg",
+    location:"Near Phase-1 Gondola Station",
+    distance:"Adjacent to gate",
+    covered:false,
+    security:["Guard"],
+    totalSlots:90,
+    availableSlots:9,
+    pricePerHour:30,
+    pricePerDay:200,
+    vehicle:"Bike",
+    image:"parking-gulmarg-gondola.jpg"
+  },
+  {
+    id:"GTK-01",
+    name:"MG Marg Central Parking",
+    destination:"Gangtok",
+    location:"MG Marg, Gangtok",
+    distance:"2 min walk",
+    covered:true,
+    security:["CCTV","Guard"],
+    totalSlots:75,
+    availableSlots:41,
+    pricePerHour:25,
+    pricePerDay:170,
+    vehicle:"Car",
+    image:"parking-gangtok-mg-marg.jpg"
+  },
+  {
+    id:"RSK-01",
+    name:"Laxman Jhula Riverside Parking",
+    destination:"Rishikesh",
+    location:"Near Laxman Jhula",
+    distance:"5 min walk",
+    covered:false,
+    security:["CCTV"],
+    totalSlots:110,
+    availableSlots:78,
+    pricePerHour:15,
+    pricePerDay:100,
+    vehicle:"Bus",
+    image:"parking-rishikesh-laxman-jhula.jpg"
+  }
+];
+
+/* ============================================================
+   ICONS
+   ============================================================ */
+function pinSVG(){
+  return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>`;
+}
+function shieldSVG(){
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3z"/></svg>`;
+}
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let activeVehicleChip = "All";
+let searchDestination = "All";
+
+/* ============================================================
+   RENDER: NAV
+   ============================================================ */
+function renderNav(){
+  const ul = document.getElementById('navList');
+  ul.innerHTML = navItems.map(item =>
+    `<li><a href="${item.href}" class="${item.label.toLowerCase()===currentPage ? 'active' : ''}">${item.label}</a></li>`
+  ).join('');
+}
+
+/* ============================================================
+   RENDER: DESTINATION DROPDOWN (built from data, not hardcoded)
+   ============================================================ */
+function renderDestinationOptions(){
+  const select = document.getElementById('destSelect');
+  const uniqueDest = [...new Set(parkingLots.map(l => l.destination))];
+  uniqueDest.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d;
+    opt.textContent = d;
+    select.appendChild(opt);
+  });
+}
+
+/* ============================================================
+   RENDER: VEHICLE CHIPS
+   ============================================================ */
+function renderChips(){
+  const group = document.getElementById('chipGroup');
+  const chips = ["All","Car","Bike","Bus"];
+  group.innerHTML = chips.map(c =>
+    `<button class="chip ${c===activeVehicleChip ? 'active':''}" data-vehicle="${c}">${c === "All" ? "All Vehicles" : c}</button>`
+  ).join('');
+  group.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeVehicleChip = btn.dataset.vehicle;
+      renderChips();
+      renderLots();
+    });
+  });
+}
+
+/* ============================================================
+   RENDER: PARKING GRID
+   ============================================================ */
+function renderLots(){
+  const grid = document.getElementById('parkingGrid');
+  const noResults = document.getElementById('noResults');
+  const resultCount = document.getElementById('resultCount');
+
+  let list = [...parkingLots];
+  if(searchDestination !== "All") list = list.filter(l => l.destination === searchDestination);
+  if(activeVehicleChip !== "All") list = list.filter(l => l.vehicle === activeVehicleChip);
+
+  resultCount.textContent = `${list.length} parking lot${list.length !== 1 ? 's' : ''} found`;
+
+  if(!list.length){
+    grid.innerHTML = "";
+    noResults.style.display = "block";
+    return;
+  }
+  noResults.style.display = "none";
+
+  grid.innerHTML = list.map(lot => {
+    const pct = Math.round((lot.availableSlots / lot.totalSlots) * 100);
+    let barColor = "#2b8a3e", numClass = "high";
+    if(pct <= 15){ barColor = "#c0392b"; numClass = "low"; }
+    else if(pct <= 45){ barColor = "#c47f14"; numClass = "mid"; }
+
+    const full = lot.availableSlots === 0;
+
+    return `
+    <article class="lot-card">
+      <div class="img-wrap">
+        <img src="${IMG_BASE}${lot.image}" alt="${lot.name}" onerror="this.parentElement.style.background='#a9c6d8'; this.remove()">
+        <div class="cover-tag">${lot.covered ? "Covered" : "Open Air"}</div>
+        <div class="dist-tag">${lot.distance}</div>
+      </div>
+      <div class="content">
+        <h3>${lot.name}</h3>
+        <div class="lot-location">${pinSVG()} ${lot.location}</div>
+
+        <div class="security-row">
+          ${lot.security.map(s => `<span class="sec-pill">${shieldSVG()} ${s}</span>`).join('')}
+        </div>
+
+        <div class="slots-block">
+          <div class="slots-label">
+            <span>Live Availability</span>
+            <span class="num ${numClass}">${lot.availableSlots} / ${lot.totalSlots} slots</span>
+          </div>
+          <div class="slot-bar"><div class="slot-bar-fill" style="width:${pct}%; background:${barColor};"></div></div>
+        </div>
+
+        <div class="lot-footer">
+          <div class="price">₹${lot.pricePerHour}<span> /hr · ₹${lot.pricePerDay}/day</span></div>
+          <button class="book-btn" data-id="${lot.id}" ${full ? 'disabled' : ''}>${full ? 'Full' : 'Book Slot'}</button>
+        </div>
+      </div>
+    </article>
+  `;
+  }).join('');
+
+  grid.querySelectorAll('.book-btn:not([disabled])').forEach(btn => {
+    btn.addEventListener('click', () => openModal(btn.dataset.id));
+  });
+}
+
+/* ============================================================
+   SEARCH PANEL
+   ============================================================ */
+document.getElementById('findBtn').addEventListener('click', () => {
+  searchDestination = document.getElementById('destSelect').value;
+  const vehicleFromSearch = document.getElementById('vehicleSelect').value;
+  activeVehicleChip = vehicleFromSearch;
+  renderChips();
+  renderLots();
+  document.querySelector('.toolbar').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* ============================================================
+   BOOKING MODAL LOGIC
+   ============================================================ */
+let currentLot = null;
+let selectedTime = null;
+
+function buildTimeSlots(){
+  const times = ["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00"];
+  const grid = document.getElementById('slotTimeGrid');
+  grid.innerHTML = times.map(t => `<div class="time-chip" data-time="${t}">${t}</div>`).join('');
+  grid.querySelectorAll('.time-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      grid.querySelectorAll('.time-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      selectedTime = chip.dataset.time;
+      updateSummary();
+      validateForm();
+    });
+  });
+}
+
+function updateSummary(){
+  const duration = document.getElementById('durationSelect');
+  const durationLabel = duration.options[duration.selectedIndex].text;
+  const summary = document.getElementById('modalSummary');
+  if(!currentLot) return;
+  const est = duration.value == 24
+    ? currentLot.pricePerDay
+    : currentLot.pricePerHour * parseInt(duration.value, 10);
+  summary.innerHTML = `
+    <strong>${currentLot.name}</strong><br>
+    ${currentLot.location}<br>
+    Arrival: <strong>${selectedTime || "—"}</strong> &nbsp;|&nbsp; Duration: <strong>${durationLabel}</strong><br>
+    Estimated cost: <strong>₹${est}</strong>
+  `;
+}
+
+function validateForm(){
+  const vehicleNum = document.getElementById('vehicleNumInput').value.trim();
+  const name = document.getElementById('nameInput').value.trim();
+  const confirmBtn = document.getElementById('confirmBtn');
+  confirmBtn.disabled = !(selectedTime && vehicleNum && name);
+}
+
+function openModal(lotId){
+  currentLot = parkingLots.find(l => l.id === lotId);
+  if(!currentLot) return;
+
+  selectedTime = null;
+  document.getElementById('modalLotName').textContent = currentLot.name;
+  document.getElementById('modalLotLocation').textContent = currentLot.location;
+  document.getElementById('vehicleNumInput').value = "";
+  document.getElementById('nameInput').value = "";
+  document.getElementById('durationSelect').value = "8";
+
+  buildTimeSlots();
+  updateSummary();
+  validateForm();
+
+  document.getElementById('formView').classList.remove('hide');
+  document.getElementById('confirmView').classList.remove('show');
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if(e.target.id === 'modalOverlay') closeModal();
+});
+document.getElementById('vehicleNumInput').addEventListener('input', validateForm);
+document.getElementById('nameInput').addEventListener('input', validateForm);
+document.getElementById('durationSelect').addEventListener('change', updateSummary);
+
+document.getElementById('confirmBtn').addEventListener('click', () => {
+  const vehicleNum = document.getElementById('vehicleNumInput').value.trim();
+  const name = document.getElementById('nameInput').value.trim();
+  const duration = document.getElementById('durationSelect');
+  const durationLabel = duration.options[duration.selectedIndex].text;
+
+  const bookingId = "PK-" + Math.floor(100000 + Math.random() * 900000);
+  document.getElementById('bookingIdText').textContent = bookingId;
+  document.getElementById('confirmSummary').innerHTML = `
+    <strong>${currentLot.name}</strong><br>
+    ${currentLot.location}<br>
+    Vehicle: <strong>${vehicleNum}</strong> &nbsp;|&nbsp; Name: <strong>${name}</strong><br>
+    Arrival: <strong>${selectedTime}</strong> &nbsp;|&nbsp; Duration: <strong>${durationLabel}</strong>
+  `;
+
+  // Reduce available slots locally to simulate a real-time booking
+  if(currentLot.availableSlots > 0) currentLot.availableSlots -= 1;
+
+  document.getElementById('formView').classList.add('hide');
+  document.getElementById('confirmView').classList.add('show');
+});
+
+document.getElementById('doneBtn').addEventListener('click', () => {
+  closeModal();
+  renderLots();
+});
+
+/* ============================================================
+   MOBILE MENU
+   ============================================================ */
+document.getElementById('burgerBtn').addEventListener('click', () => {
+  const nav = document.getElementById('mainNav');
+  nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.getElementById('year').textContent = new Date().getFullYear();
+document.getElementById('dateInput').valueAsDate = new Date();
+renderNav();
+renderDestinationOptions();
+renderChips();
+renderLots();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adventures — Explore North India</title>
+<style>
+  :root{
+    --sky-top:#0d4d8f;
+    --sky-bottom:#3a8dd6;
+    --accent-green:#a8d92e;
+    --card-blue:#cfeaf5;
+    --teal-ring:#3aa7a0;
+    --text-dark:#1b2a3a;
+    --white:#ffffff;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --font-head:'Baloo 2','Segoe UI',sans-serif;
+    --font-body:'Poppins','Segoe UI',sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  body{
+    font-family:var(--font-body);
+    color:var(--text-dark);
+    background:#eef7fb;
+  }
+
+  img{max-width:100%;display:block;}
+
+  /* ===== HEADER (shared) ===== */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 48px;
+    background:linear-gradient(180deg,#e9f7fb 0%,#dff0f7 100%);
+    border-radius:0 0 40px 40px;
+    position:relative;
+    z-index:10;
+  }
+  .logo{display:flex;align-items:center;gap:12px;font-family:var(--font-head);font-weight:700;}
+  .logo-badge{
+    width:56px;height:56px;border-radius:50%;background:var(--white);
+    border:3px solid var(--teal-ring);display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .logo-badge img{width:100%;height:100%;object-fit:cover;}
+  nav ul{list-style:none;display:flex;gap:36px;}
+  nav a{text-decoration:none;color:var(--text-dark);font-weight:600;letter-spacing:.3px;font-size:15px;transition:color .2s;}
+  nav a:hover, nav a.active{ color:var(--teal-ring); }
+  .ministry{display:flex;align-items:center;gap:10px;}
+  .ministry img{height:52px;}
+  .ministry-text{font-size:11px;line-height:1.2;color:var(--text-dark);}
+  .ministry-text strong{font-size:14px;display:block;}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger span{width:26px;height:3px;background:var(--text-dark);border-radius:2px;}
+
+  /* ===== PAGE HERO ===== */
+  .page-hero{
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(13,77,143,.6) 0%, rgba(58,141,214,.4) 55%, rgba(58,141,214,0) 100%),
+      url('images/adventures bg.png') center/cover no-repeat;
+    min-height:340px;
+    padding:70px 48px 50px;
+    color:var(--white);
+    text-align:center;
+  }
+  .page-hero h1{
+    font-family:var(--font-head);
+    font-size:clamp(28px,4vw,50px);
+    text-transform:uppercase;
+    text-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  .page-hero h1 .accent{ color:var(--accent-green); }
+  .page-hero p{
+    margin-top:16px;
+    font-size:clamp(14px,1.3vw,18px);
+    font-weight:500;
+    text-shadow:0 1px 6px rgba(0,0,0,.35);
+    max-width:720px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  /* ===== FILTER BAR ===== */
+  .filter-bar{
+    max-width:1100px;
+    margin:-30px auto 0;
+    position:relative;
+    z-index:5;
+    background:var(--white);
+    border-radius:60px;
+    box-shadow:0 12px 30px rgba(20,50,70,.18);
+    padding:10px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+  }
+  .filter-btn{
+    border:none;
+    background:transparent;
+    padding:10px 20px;
+    border-radius:40px;
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:13.5px;
+    color:var(--text-dark);
+    cursor:pointer;
+    transition:background .2s, color .2s;
+  }
+  .filter-btn:hover{ background:#eaf6f5; }
+  .filter-btn.active{
+    background:var(--accent-green);
+    color:var(--text-dark);
+  }
+
+  /* ===== ADVENTURE GRID ===== */
+  .adventures-section{
+    padding:60px 48px 90px;
+    max-width:1300px;
+    margin:0 auto;
+  }
+  .section-label{
+    text-align:center;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    color:#2b6fa3;
+    margin-bottom:6px;
+  }
+  .section-title{
+    text-align:center;
+    font-family:var(--font-head);
+    font-size:clamp(22px,2.6vw,32px);
+    margin-bottom:36px;
+  }
+
+  .adv-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+  }
+  .adv-card{
+    background:var(--card-blue);
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    border:6px solid var(--white);
+    box-shadow:0 12px 30px rgba(20,50,70,.15);
+    display:flex;
+    flex-direction:column;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .adv-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 36px rgba(20,50,70,.24);
+  }
+  .adv-card .img-wrap{
+    position:relative;
+    height:190px;
+    flex-shrink:0;
+  }
+  .adv-card .img-wrap img{width:100%;height:100%;object-fit:cover;}
+  .diff-badge{
+    position:absolute;
+    top:14px;
+    right:14px;
+    background:var(--white);
+    color:var(--text-dark);
+    font-size:11px;
+    font-weight:800;
+    padding:6px 14px;
+    border-radius:20px;
+    letter-spacing:.4px;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+  }
+  .diff-badge.easy{ color:#2b8a3e; }
+  .diff-badge.moderate{ color:#c47f14; }
+  .diff-badge.hard{ color:#c0392b; }
+
+  .adv-card .content{
+    padding:20px 22px 24px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .adv-card h3{
+    font-family:var(--font-head);
+    font-size:19px;
+    margin-bottom:6px;
+  }
+  .adv-meta{
+    display:flex;
+    gap:14px;
+    font-size:12px;
+    font-weight:700;
+    color:#2b6fa3;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .adv-meta span{display:flex;align-items:center;gap:4px;}
+  .adv-meta svg{width:13px;height:13px;flex-shrink:0;}
+  .adv-card .desc{
+    font-size:12.5px;
+    line-height:1.55;
+    font-style:italic;
+    color:#33465a;
+    margin-bottom:16px;
+    flex:1;
+  }
+  .adv-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .price{
+    font-family:var(--font-head);
+    font-size:17px;
+    color:var(--text-dark);
+  }
+  .price span{
+    font-size:11px;
+    font-weight:500;
+    color:#5a6b7a;
+    font-family:var(--font-body);
+  }
+  .book-btn{
+    background:var(--teal-ring);
+    color:var(--white);
+    border:none;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:700;
+    font-size:12.5px;
+    cursor:pointer;
+    transition:background .2s;
+  }
+  .book-btn:hover{ background:#2e8983; }
+
+  .no-results{
+    text-align:center;
+    padding:60px 20px;
+    font-style:italic;
+    color:#5a6b7a;
+    display:none;
+  }
+
+  footer{
+    background:var(--sky-top);
+    color:var(--white);
+    text-align:center;
+    padding:26px;
+    font-size:13px;
+  }
+
+  @media (max-width:980px){
+    .adv-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:720px){
+    nav{display:none;}
+    .burger{display:flex;}
+    header{padding:16px 20px;}
+    .page-hero{padding:50px 20px 40px;}
+    .adventures-section{padding:40px 20px 60px;}
+    .adv-grid{grid-template-columns:1fr;}
+    .ministry-text{display:none;}
+    .filter-bar{margin:-24px 16px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge"><img src="C:/Users/KUNAL/Downloads/images/logo.png" alt="Site logo" onerror="this.style.display='none'"></div>
+  </div>
+
+  <nav id="mainNav">
+    <ul id="navList"></ul>
+  </nav>
+
+  <div class="ministry">
+    <div class="ministry-text"><strong>MINISTRY OF</strong>TOURISM</div>
+  </div>
+
+  <button class="burger" id="burgerBtn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<section class="page-hero">
+  <h1><span class="accent">Adventures</span> Await In North India</h1>
+  <p>From white water rapids to high-altitude treks, choose your next thrill across the Himalayas.</p>
+</section>
+
+<div class="filter-bar" id="filterBar"></div>
+
+<section class="adventures-section">
+  <div class="section-label">HANDPICKED FOR YOU</div>
+  <div class="section-title">Popular Adventure Activities</div>
+  <div class="adv-grid" id="advGrid"></div>
+  <p class="no-results" id="noResults">No adventures found in this category yet. Check back soon!</p>
+</section>
+
+<footer>
+  &copy; <span id="year"></span> Ministry of Tourism, Government of India — Explore North India
+</footer>
+
+<script>
+/* ============================================================
+   DYNAMIC DATA — edit these arrays to change page content.
+   Drop matching image files into the /images folder.
+   ============================================================ */
+
+const navItems = [
+  {label:"Home", href:"bhraman_home.html"},
+  {label:"Adventures", href:"bhraman_adventures.html"},
+  {label:"Rentals", href:"bhraman_rentals.html"},
+  {label:"Parking", href:"bhraman_parking.html"},
+  {label:"Guides", href:"guides.html"},
+  {label:"About", href:"about.html"},
+  {label:"FAQ", href:"faq.html"}
+];
+const currentPage = "adventures";
+
+const categories = ["All","Trekking","Water Sports","Aerial","Winter","Wildlife"];
+
+const adventures = [
+  {
+    title:"Chadar Trek, Leh-Ladakh",
+    category:"Trekking",
+    difficulty:"Hard",
+    location:"Leh-Ladakh, J&K",
+    duration:"9 Days",
+    price:"₹28,500",
+    image:"images/chadartrek_leh.jpg",
+    desc:"Walk across the frozen Zanskar river through dramatic canyons, one of the most extreme winter treks in the world."
+  },
+  {
+    title:"River Rafting, Rishikesh",
+    category:"Water Sports",
+    difficulty:"Moderate",
+    location:"Rishikesh, Uttrakhand",
+    duration:"Half Day",
+    price:"₹1,200",
+    image:"images/rafting_rishikesh.webp",
+    desc:"Ride the rapids of the holy Ganga through Grade II-IV white water sections framed by forested hills."
+  },
+  {
+    title:"Paragliding, Bir Billing",
+    category:"Aerial",
+    difficulty:"Easy",
+    location:"Bir Billing, Himachal Pradesh",
+    duration:"20-30 Min",
+    price:"₹2,800",
+    image:"images/paragliding_birbiling.png",
+    desc:"Soar above the Dhauladhar range from Asia's paragliding capital with tandem flights for all experience levels."
+  },
+  {
+    title:"Skiing, Gulmarg",
+    category:"Winter",
+    difficulty:"Moderate",
+    location:"Gulmarg, J&K",
+    duration:"Full Day",
+    price:"₹3,500",
+    image:"images/sking_gulmarg.jpg",
+    desc:"Carve through champagne powder on one of the highest ski slopes in the world, with the Gulmarg Gondola access."
+  },
+  {
+    title:"Kedarkantha Trek",
+    category:"Trekking",
+    difficulty:"Moderate",
+    location:"Uttrakhand",
+    duration:"6 Days",
+    price:"₹9,800",
+    image:"images/kedarkantha.jpg",
+    desc:"A snow-laden summit trek through pine forests, perfect for first-time Himalayan trekkers."
+  },
+  {
+    title:"Jim Corbett Safari",
+    category:"Wildlife",
+    difficulty:"Easy",
+    location:"Jim Corbett, Uttrakhand",
+    duration:"3-4 Hours",
+    price:"₹4,200",
+    image:"images/jimcorbet_safari.jpg",
+    desc:"Track tigers, elephants, and over 600 bird species across India's oldest national park."
+  },
+  {
+    title:"Zanskar Valley Expedition",
+    category:"Trekking",
+    difficulty:"Hard",
+    location:"Zanskar, Leh-Ladakh",
+    duration:"12 Days",
+    price:"₹42,000",
+    image:"images/zanskar_valley.webp",
+    desc:"A remote high-altitude crossing through monasteries and glacial valleys, for seasoned trekkers only."
+  },
+  {
+    title:"Kayaking, Pangong Lake",
+    category:"Water Sports",
+    difficulty:"Easy",
+    location:"Pangong Tso, Leh-Ladakh",
+    duration:"1-2 Hours",
+    price:"₹1,800",
+    image:"images/pangong_kayaking.jpeg",
+    desc:"Glide across the shimmering blue waters of Pangong Tso at 14,000 ft, framed by barren mountains."
+  },
+  {
+    title:"Hot Air Ballooning, Manali",
+    category:"Aerial",
+    difficulty:"Easy",
+    location:"Manali, Himachal Pradesh",
+    duration:"45 Min",
+    price:"₹6,500",
+    image:"images/hotairbaloon.avif",
+    desc:"Float above the Kullu Valley at sunrise for a bird's eye view of snow peaks and apple orchards."
+  }
+];
+
+/* ============================================================
+   ICONS
+   ============================================================ */
+function pinSVG(){
+  return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>`;
+}
+function clockSVG(){
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>`;
+}
+
+/* ============================================================
+   RENDER: NAV
+   ============================================================ */
+function renderNav(){
+  const ul = document.getElementById('navList');
+  ul.innerHTML = navItems.map(item =>
+    `<li><a href="${item.href}" class="${item.label.toLowerCase()===currentPage ? 'active' : ''}">${item.label}</a></li>`
+  ).join('');
+}
+
+/* ============================================================
+   RENDER: FILTER BAR
+   ============================================================ */
+let activeCategory = "All";
+
+function renderFilters(){
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML = categories.map(cat =>
+    `<button class="filter-btn ${cat===activeCategory ? 'active':''}" data-cat="${cat}">${cat}</button>`
+  ).join('');
+
+  bar.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      renderFilters();
+      renderAdventures();
+    });
+  });
+}
+
+/* ============================================================
+   RENDER: ADVENTURE CARDS
+   ============================================================ */
+function renderAdventures(){
+  const grid = document.getElementById('advGrid');
+  const noResults = document.getElementById('noResults');
+
+  const list = activeCategory === "All"
+    ? adventures
+    : adventures.filter(a => a.category === activeCategory);
+
+  if(!list.length){
+    grid.innerHTML = "";
+    noResults.style.display = "block";
+    return;
+  }
+  noResults.style.display = "none";
+
+  grid.innerHTML = list.map(a => `
+    <article class="adv-card">
+      <div class="img-wrap">
+        <img src="${a.image}" alt="${a.title}" onerror="this.parentElement.style.background='#a9c6d8'; this.remove()">
+        <div class="diff-badge ${a.difficulty.toLowerCase()}">${a.difficulty}</div>
+      </div>
+      <div class="content">
+        <h3>${a.title}</h3>
+        <div class="adv-meta">
+          <span>${pinSVG()} ${a.location}</span>
+          <span>${clockSVG()} ${a.duration}</span>
+        </div>
+        <p class="desc">${a.desc}</p>
+        <div class="adv-footer">
+          <div class="price">${a.price}<span> / person</span></div>
+          <button class="book-btn" data-title="${a.title}">Book Now</button>
+        </div>
+      </div>
+    </article>
+  `).join('');
+
+  grid.querySelectorAll('.book-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      alert(`Booking request started for: ${btn.dataset.title}\n(Connect this button to your booking system.)`);
+    });
+  });
+}
+
+/* ============================================================
+   MOBILE MENU
+   ============================================================ */
+document.getElementById('burgerBtn').addEventListener('click', () => {
+  const nav = document.getElementById('mainNav');
+  nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.getElementById('year').textContent = new Date().getFullYear();
+renderNav();
+renderFilters();
+renderAdventures();
+</script>
+
+</body>
+</html>

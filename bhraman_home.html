@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explore North India — Ministry of Tourism</title>
+<style>
+  :root{
+    --sky-top:#0d4d8f;
+    --sky-bottom:#3a8dd6;
+    --accent-green:#a8d92e;
+    --card-blue:#cfeaf5;
+    --teal-ring:#3aa7a0;
+    --text-dark:#1b2a3a;
+    --white:#ffffff;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --font-head:'Baloo 2','Segoe UI',sans-serif;
+    --font-body:'Poppins','Segoe UI',sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  body{
+    font-family:var(--font-body);
+    color:var(--text-dark);
+    background:#eef7fb;
+  }
+
+  img{max-width:100%;display:block;}
+
+  /* ===== HEADER ===== */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 48px;
+    background:linear-gradient(180deg,#e9f7fb 0%,#dff0f7 100%);
+    border-radius:0 0 40px 40px;
+    position:relative;
+    z-index:10;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-family:var(--font-head);
+    font-weight:700;
+  }
+  .logo-badge{
+    width:56px;height:56px;
+    border-radius:50%;
+    background:var(--white);
+    border:3px solid var(--teal-ring);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .logo-badge img{width:100%;height:100%;object-fit:cover;}
+
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap:36px;
+  }
+  nav a{
+    text-decoration:none;
+    color:var(--text-dark);
+    font-weight:600;
+    letter-spacing:.3px;
+    font-size:15px;
+    transition:color .2s;
+  }
+  nav a:hover, nav a.active{ color:var(--teal-ring); }
+
+  .ministry{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .ministry img{height:52px;}
+  .ministry-text{font-size:11px;line-height:1.2;color:var(--text-dark);}
+  .ministry-text strong{font-size:14px;display:block;}
+
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger span{width:26px;height:3px;background:var(--text-dark);border-radius:2px;}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(13,77,143,.55) 0%, rgba(58,141,214,.35) 45%, rgba(58,141,214,0) 70%),
+      url('images/background_web.png') center/cover no-repeat;
+    min-height:640px;
+    padding:70px 48px 40px;
+    color:var(--white);
+  }
+  .hero-inner{
+    max-width:1100px;
+    margin:0 auto;
+    text-align:center;
+  }
+  .hero h1{
+    font-family:var(--font-head);
+    font-size:clamp(28px,4.2vw,54px);
+    line-height:1.15;
+    text-transform:uppercase;
+    text-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  .hero h1 .accent{ color:var(--accent-green); }
+  .hero p.subtitle{
+    margin-top:22px;
+    font-size:clamp(14px,1.4vw,19px);
+    font-weight:500;
+    text-shadow:0 1px 6px rgba(0,0,0,.35);
+  }
+
+  .search-wrap{
+    max-width:680px;
+    margin:44px auto 0;
+    display:flex;
+    align-items:center;
+    background:var(--white);
+    border-radius:50px;
+    padding:8px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+  }
+  .search-wrap input{
+    flex:1;
+    border:none;
+    outline:none;
+    background:transparent;
+    padding:14px 22px;
+    font-size:16px;
+    color:var(--text-dark);
+    font-family:var(--font-body);
+  }
+  .search-btn{
+    width:56px;height:56px;
+    border-radius:50%;
+    background:var(--accent-green);
+    border:none;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:transform .2s;
+  }
+  .search-btn:hover{ transform:scale(1.06); }
+  .search-btn svg{width:24px;height:24px;}
+
+  /* ===== OFFICIALS STRIP ===== */
+  .officials{
+    background:rgba(20,35,50,.55);
+    backdrop-filter:blur(2px);
+    margin-top:60px;
+    border-radius:24px;
+    padding:36px 40px 30px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:28px;
+  }
+  .official{
+    text-align:center;
+    color:var(--white);
+  }
+  .official .photo{
+    width:110px;height:110px;
+    border-radius:50%;
+    border:4px solid var(--teal-ring);
+    overflow:hidden;
+    margin:0 auto 14px;
+    background:#ccc;
+  }
+  .official .photo img{width:100%;height:100%;object-fit:cover;}
+  .official h3{
+    font-size:15px;
+    letter-spacing:.5px;
+    margin-bottom:4px;
+  }
+  .official .role{
+    font-size:12px;
+    font-weight:600;
+    padding-bottom:8px;
+    border-bottom:2px solid var(--accent-green);
+    display:inline-block;
+    margin-bottom:10px;
+  }
+  .official .quote{
+    font-size:11.5px;
+    font-style:italic;
+    line-height:1.5;
+    opacity:.9;
+  }
+
+  /* ===== DESTINATIONS ===== */
+  .destinations{
+    padding:60px 48px 90px;
+    background:
+      linear-gradient(180deg, rgba(238,247,251,0) 0%, rgba(238,247,251,.9) 15%, #eef7fb 100%),
+      url('images/background_web.png') center top/cover no-repeat;
+  }
+  .dest-grid{
+    max-width:1300px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:32px;
+  }
+  .dest-card{
+    background:var(--card-blue);
+    border-radius:var(--radius-lg);
+    display:flex;
+    overflow:hidden;
+    box-shadow:0 12px 30px rgba(20,50,70,.18);
+    border:6px solid var(--white);
+  }
+  .dest-card .img-col{
+    width:42%;
+    flex-shrink:0;
+  }
+  .dest-card .img-col img{
+    width:100%;height:100%;object-fit:cover;
+  }
+  .dest-card .content{
+    padding:22px 26px;
+    flex:1;
+  }
+  .dest-card h3{
+    font-family:var(--font-head);
+    font-size:22px;
+    margin-bottom:6px;
+  }
+  .elevation{
+    font-size:12.5px;
+    font-weight:700;
+    color:#2b6fa3;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    margin-bottom:10px;
+  }
+  .dest-card .desc{
+    font-size:12.5px;
+    line-height:1.55;
+    font-style:italic;
+    color:#33465a;
+    margin-bottom:14px;
+  }
+  .popular-label{
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.6px;
+    color:#1b2a3a;
+    margin-bottom:10px;
+  }
+  .places-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px 14px;
+  }
+  .place-pill{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    font-size:12px;
+    font-weight:700;
+    font-style:italic;
+    color:#1b2a3a;
+    cursor:default;
+  }
+  .place-pill svg{width:12px;height:12px;flex-shrink:0;color:#2b6fa3;}
+
+  /* ===== FOOTER (simple, dynamic) ===== */
+  footer{
+    background:var(--sky-top);
+    color:var(--white);
+    text-align:center;
+    padding:26px;
+    font-size:13px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:980px){
+    .officials{grid-template-columns:repeat(2,1fr);}
+    .dest-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:720px){
+    nav{display:none;}
+    .burger{display:flex;}
+    header{padding:16px 20px;}
+    .hero{padding:50px 20px 30px;}
+    .officials{grid-template-columns:1fr;padding:24px 20px;}
+    .destinations{padding:40px 20px 60px;}
+    .dest-card{flex-direction:column;}
+    .dest-card .img-col{width:100%;height:200px;}
+    .ministry-text{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge"><img src="images\logo.png" alt="Site logo" onerror="this.style.display='none'"></div>
+  </div>
+
+  <nav id="mainNav">
+    <ul id="navList"></ul>
+  </nav>
+
+  <div class="ministry">
+    <div class="ministry-text"><strong>MINISTRY OF</strong>TOURISM</div>
+  </div>
+
+  <button class="burger" id="burgerBtn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1><span class="accent">Explore North India</span> : Where Nature</h1>
+    <h1>Embraces With Smile</h1>
+    <p class="subtitle">Promoting Tourism That Respects And Protects India's Natural And Cultural Heritage</p>
+
+    <form class="search-wrap" id="searchForm">
+      <input type="text" id="searchInput" placeholder="Enter Destination Name" autocomplete="off">
+      <button type="submit" class="search-btn" aria-label="Search">
+        <img src="images/search.png" alt="Search" style="width:24px;height:24px;">
+      </button>
+    </form>
+  </div>
+
+  <div class="officials" id="officialsWrap"></div>
+</section>
+
+<section class="destinations">
+  <div class="dest-grid" id="destGrid"></div>
+</section>
+
+<footer>
+  &copy; <span id="year"></span> Ministry of Tourism, Government of India — Explore North India
+</footer>
+
+<script>
+/* ============================================================
+   DYNAMIC DATA — edit these arrays to change page content.
+   Drop matching image files into the /images folder.
+   ============================================================ */
+
+const navItems = [
+  {label:"Home", href:"bhraman_home.html"},
+  {label:"Adventures", href:"bhraman_adventures.html"},
+  {label:"Rentals", href:"bhraman_rentals.html"},
+  {label:"Parking", href:"bhraman_parking.html"},
+  {label:"Guides", href:"guides.html"},
+  {label:"About", href:"about.html"},
+  {label:"FAQ", href:"faq.html"}
+];
+const currentPage = "home";
+
+const officials = [
+  {
+    name:"Narendra Modi",
+    role:"Hon'ble Prime Minister of India",
+    photo:"images/modi.jpg",
+    quote:"He has played a transformative role in shaping the country's tourism sector. Under his leadership, flagship initiatives such as Incredible India 2.0, Dekho Apna Desh, and the promotion of cultural heritage circuits have received global recognition."
+  },
+  {
+    name:"Gajendra Singh Sekhawat",
+    role:"Union Minister of Culture & Tourism",
+    photo:"images/gajendra.png",
+    quote:"He is responsible for guiding India's tourism vision at the national level, focusing on positioning the country as a global travel destination while strengthening cultural heritage promotion."
+  },
+  {
+    name:"Suresh Gopi",
+    role:"Minister of State for Tourism",
+    photo:"images/suresh.png",
+    quote:"Works alongside the Union Minister to highlight India's diverse attractions. With his dynamic presence, he actively engages in initiatives to expand tourism opportunities and boost India's visibility worldwide."
+  },
+  {
+    name:"Suman Billa, IAS",
+    role:"Additional Secretary & Director General",
+    photo:"images/suman.png",
+    quote:"He contributes significantly to planning and development. He has been actively involved in promoting India's tourism potential on both domestic and international platforms."
+  }
+];
+
+const destinations = [
+  {
+    state:"Jammu & Kashmir",
+    elevation:"1,850 Ft",
+    image:"images/jammu.png",
+    desc:"Kashmir, known as \u201CParadise on Earth\u201D, is a Himalayan region famed for its valleys, lakes, and mountains. Srinagar, with Dal Lake and Mughal gardens, is its heart. The region is also known for pashmina shawls, carpets, and rich cultural heritage.",
+    places:["Srinagar","Sonamarg","Gulmarg","Dal-Lake","Amarnath","Pahalgam"]
+  },
+  {
+    state:"Uttrakhand",
+    elevation:"1,850 Ft",
+    image:"images/uttrakhand.png",
+    desc:"Uttarakhand, often called the \u201CLand of the Gods\u201D, is a Himalayan state in northern India known for its spiritual sites, snow-capped peaks, rivers, and wildlife. With holy towns like Rishikesh and Haridwar.",
+    places:["Rishikesh","Nainital","Haridwar","Mussoorie","Kedarnath","Jim Corbett"]
+  },
+  {
+    state:"Himachal Pradesh",
+    elevation:"1,850 Ft",
+    image:"images/himachal.png",
+    desc:"Himachal Pradesh, known as the \u201CLand of the Snow\u201D, is a state in northern India famed for its hill stations, valleys, rivers, and temples. It offers a mix of adventure tourism, spiritual retreats, and scenic beauty, making it a popular destination.",
+    places:["Shimla","Sonamarg","Manali","Leh-Ladakh","Dharamshala","Kupwara"]
+  },
+  {
+    state:"Sikkim",
+    elevation:"1,850 Ft",
+    image:"images/sikkim.png",
+    desc:"Sikkim, a small Himalayan state in northeast India, is known for its snow-capped peaks, Buddhist monasteries, lakes, and vibrant culture. Home to Khangchendzonga, the world's third-highest mountain.",
+    places:["Gangtok","Changu Lake","Yumthang","Namchi","Pelling","Lachung"]
+  }
+];
+
+/* ============================================================
+   RENDER FUNCTIONS
+   ============================================================ */
+
+function renderNav(){
+  const ul = document.getElementById('navList');
+  ul.innerHTML = navItems.map(item =>
+    `<li><a href="${item.href}" class="${item.label.toLowerCase()===currentPage ? 'active' : ''}">${item.label}</a></li>`
+  ).join('');
+}
+
+function renderOfficials(){
+  const wrap = document.getElementById('officialsWrap');
+  wrap.innerHTML = officials.map(o => `
+    <div class="official">
+      <div class="photo"><img src="${o.photo}" alt="${o.name}" onerror="this.parentElement.style.background='#4a6b85'; this.remove()"></div>
+      <h3>${o.name.toUpperCase()}</h3>
+      <div class="role">${o.role}</div>
+      <p class="quote">&ldquo;${o.quote}&rdquo;</p>
+    </div>
+  `).join('');
+}
+
+function pinSVG(){
+  return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>`;
+}
+function mountainSVG(){
+  return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 3l6 18H2L9 8l2.5 4.5L14 3z"/></svg>`;
+}
+
+function renderDestinations(list){
+  const grid = document.getElementById('destGrid');
+  grid.innerHTML = list.map(d => `
+    <article class="dest-card">
+      <div class="img-col"><img src="${d.image}" alt="${d.state}" onerror="this.parentElement.style.background='#a9c6d8'; this.remove()"></div>
+      <div class="content">
+        <h3>${d.state}</h3>
+        <div class="elevation">${mountainSVG()} ${d.elevation}</div>
+        <p class="desc">${d.desc}</p>
+        <div class="popular-label">POPULAR PLACES</div>
+        <div class="places-grid">
+          ${d.places.map(p => `<div class="place-pill">${pinSVG()} ${p}</div>`).join('')}
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
+
+/* ============================================================
+   SEARCH — filters destination cards live by state or place name
+   ============================================================ */
+document.getElementById('searchForm').addEventListener('submit', e => e.preventDefault());
+document.getElementById('searchInput').addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  if(!q){ renderDestinations(destinations); return; }
+  const filtered = destinations.filter(d =>
+    d.state.toLowerCase().includes(q) ||
+    d.places.some(p => p.toLowerCase().includes(q))
+  );
+  renderDestinations(filtered.length ? filtered : destinations);
+});
+
+/* ============================================================
+   MOBILE MENU
+   ============================================================ */
+document.getElementById('burgerBtn').addEventListener('click', () => {
+  const nav = document.getElementById('mainNav');
+  nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.getElementById('year').textContent = new Date().getFullYear();
+renderNav();
+renderOfficials();
+renderDestinations(destinations);
+</script>
+
+</body>
+</html>

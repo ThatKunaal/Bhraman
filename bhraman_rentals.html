@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rentals — Explore North India</title>
+<style>
+  :root{
+    --sky-top:#0d4d8f;
+    --sky-bottom:#3a8dd6;
+    --accent-green:#a8d92e;
+    --card-blue:#cfeaf5;
+    --teal-ring:#3aa7a0;
+    --text-dark:#1b2a3a;
+    --white:#ffffff;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --font-head:'Baloo 2','Segoe UI',sans-serif;
+    --font-body:'Poppins','Segoe UI',sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  body{
+    font-family:var(--font-body);
+    color:var(--text-dark);
+    background:#eef7fb;
+  }
+
+  img{max-width:100%;display:block;}
+
+  /* ===== HEADER (shared) ===== */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 48px;
+    background:linear-gradient(180deg,#e9f7fb 0%,#dff0f7 100%);
+    border-radius:0 0 40px 40px;
+    position:relative;
+    z-index:10;
+  }
+  .logo{display:flex;align-items:center;gap:12px;font-family:var(--font-head);font-weight:700;}
+  .logo-badge{
+    width:56px;height:56px;border-radius:50%;background:var(--white);
+    border:3px solid var(--teal-ring);display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .logo-badge img{width:100%;height:100%;object-fit:cover;}
+  nav ul{list-style:none;display:flex;gap:36px;}
+  nav a{text-decoration:none;color:var(--text-dark);font-weight:600;letter-spacing:.3px;font-size:15px;transition:color .2s;}
+  nav a:hover, nav a.active{ color:var(--teal-ring); }
+  .ministry{display:flex;align-items:center;gap:10px;}
+  .ministry img{height:52px;}
+  .ministry-text{font-size:11px;line-height:1.2;color:var(--text-dark);}
+  .ministry-text strong{font-size:14px;display:block;}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger span{width:26px;height:3px;background:var(--text-dark);border-radius:2px;}
+
+  /* ===== PAGE HERO ===== */
+  .page-hero{
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(13,77,143,.6) 0%, rgba(58,141,214,.4) 55%, rgba(58,141,214,0) 100%),
+      url('images/rentals bg.png') center/cover no-repeat;
+    min-height:340px;
+    padding:70px 48px 50px;
+    color:var(--white);
+    text-align:center;
+  }
+  .page-hero h1{
+    font-family:var(--font-head);
+    font-size:clamp(28px,4vw,50px);
+    text-transform:uppercase;
+    text-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  .page-hero h1 .accent{ color:var(--accent-green); }
+  .page-hero p{
+    margin-top:16px;
+    font-size:clamp(14px,1.3vw,18px);
+    font-weight:500;
+    text-shadow:0 1px 6px rgba(0,0,0,.35);
+    max-width:720px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  /* ===== FILTER BAR ===== */
+  .filter-bar{
+    max-width:1100px;
+    margin:-30px auto 0;
+    position:relative;
+    z-index:5;
+    background:var(--white);
+    border-radius:60px;
+    box-shadow:0 12px 30px rgba(20,50,70,.18);
+    padding:10px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+  }
+  .filter-btn{
+    border:none;
+    background:transparent;
+    padding:10px 20px;
+    border-radius:40px;
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:13.5px;
+    color:var(--text-dark);
+    cursor:pointer;
+    transition:background .2s, color .2s;
+  }
+  .filter-btn:hover{ background:#eaf6f5; }
+  .filter-btn.active{
+    background:var(--accent-green);
+    color:var(--text-dark);
+  }
+
+  /* ===== SORT ROW ===== */
+  .toolbar{
+    max-width:1300px;
+    margin:26px auto 0;
+    padding:0 48px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .result-count{
+    font-size:13px;
+    font-weight:600;
+    color:#33465a;
+  }
+  .sort-wrap{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:600;
+  }
+  .sort-wrap select{
+    border:2px solid var(--teal-ring);
+    border-radius:20px;
+    padding:8px 14px;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:13px;
+    color:var(--text-dark);
+    background:var(--white);
+    cursor:pointer;
+    outline:none;
+  }
+
+  /* ===== RENTAL GRID ===== */
+  .rentals-section{
+    padding:24px 48px 90px;
+    max-width:1300px;
+    margin:0 auto;
+  }
+
+  .rental-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+  }
+  .rental-card{
+    background:var(--card-blue);
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    border:6px solid var(--white);
+    box-shadow:0 12px 30px rgba(20,50,70,.15);
+    display:flex;
+    flex-direction:column;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .rental-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 36px rgba(20,50,70,.24);
+  }
+  .rental-card .img-wrap{
+    position:relative;
+    height:180px;
+    flex-shrink:0;
+  }
+  .rental-card .img-wrap img{width:100%;height:100%;object-fit:cover;}
+  .avail-badge{
+    position:absolute;
+    top:14px;
+    right:14px;
+    font-size:11px;
+    font-weight:800;
+    padding:6px 14px;
+    border-radius:20px;
+    letter-spacing:.4px;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    background:var(--white);
+  }
+  .avail-badge.available{ color:#2b8a3e; }
+  .avail-badge.limited{ color:#c47f14; }
+  .avail-badge.unavailable{ color:#c0392b; }
+
+  .cat-tag{
+    position:absolute;
+    top:14px;
+    left:14px;
+    background:rgba(27,42,58,.75);
+    color:var(--white);
+    font-size:10.5px;
+    font-weight:700;
+    padding:5px 12px;
+    border-radius:16px;
+    letter-spacing:.4px;
+  }
+
+  .rental-card .content{
+    padding:20px 22px 24px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .rental-card h3{
+    font-family:var(--font-head);
+    font-size:19px;
+    margin-bottom:6px;
+  }
+  .rent-meta{
+    display:flex;
+    gap:14px;
+    font-size:12px;
+    font-weight:700;
+    color:#2b6fa3;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .rent-meta span{display:flex;align-items:center;gap:4px;}
+  .rent-meta svg{width:13px;height:13px;flex-shrink:0;}
+  .rental-card .desc{
+    font-size:12.5px;
+    line-height:1.55;
+    font-style:italic;
+    color:#33465a;
+    margin-bottom:16px;
+    flex:1;
+  }
+  .specs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:16px;
+  }
+  .spec-pill{
+    background:rgba(58,167,160,.15);
+    color:#1b6b64;
+    font-size:11px;
+    font-weight:700;
+    padding:5px 12px;
+    border-radius:14px;
+  }
+  .rental-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .price{
+    font-family:var(--font-head);
+    font-size:17px;
+    color:var(--text-dark);
+  }
+  .price span{
+    font-size:11px;
+    font-weight:500;
+    color:#5a6b7a;
+    font-family:var(--font-body);
+  }
+  .rent-btn{
+    background:var(--teal-ring);
+    color:var(--white);
+    border:none;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:700;
+    font-size:12.5px;
+    cursor:pointer;
+    transition:background .2s, opacity .2s;
+  }
+  .rent-btn:hover{ background:#2e8983; }
+  .rent-btn:disabled{
+    background:#9aa8b3;
+    cursor:not-allowed;
+  }
+
+  .no-results{
+    text-align:center;
+    padding:60px 20px;
+    font-style:italic;
+    color:#5a6b7a;
+    display:none;
+  }
+
+  footer{
+    background:var(--sky-top);
+    color:var(--white);
+    text-align:center;
+    padding:26px;
+    font-size:13px;
+  }
+
+  @media (max-width:980px){
+    .rental-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:720px){
+    nav{display:none;}
+    .burger{display:flex;}
+    header{padding:16px 20px;}
+    .page-hero{padding:50px 20px 40px;}
+    .rentals-section{padding:20px 20px 60px;}
+    .rental-grid{grid-template-columns:1fr;}
+    .ministry-text{display:none;}
+    .filter-bar{margin:-24px 16px 0;}
+    .toolbar{padding:0 20px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge"><img src="C:/Users/KUNAL/Downloads/images/logo.png" alt="Site logo" onerror="this.style.display='none'"></div>
+  </div>
+
+  <nav id="mainNav">
+    <ul id="navList"></ul>
+  </nav>
+
+  <div class="ministry">
+    <div class="ministry-text"><strong>MINISTRY OF</strong>TOURISM</div>
+  </div>
+
+  <button class="burger" id="burgerBtn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<section class="page-hero">
+  <h1><span class="accent">Rentals</span> For Every Journey</h1>
+  <p>Bikes, cars, camping and trekking gear — everything you need to explore North India, ready when you are.</p>
+</section>
+
+<div class="filter-bar" id="filterBar"></div>
+
+<div class="toolbar">
+  <div class="result-count" id="resultCount"></div>
+  <div class="sort-wrap">
+    <label for="sortSelect">Sort by</label>
+    <select id="sortSelect">
+      <option value="default">Recommended</option>
+      <option value="price-low">Price: Low to High</option>
+      <option value="price-high">Price: High to Low</option>
+      <option value="name">Name: A-Z</option>
+    </select>
+  </div>
+</div>
+
+<section class="rentals-section">
+  <div class="rental-grid" id="rentalGrid"></div>
+  <p class="no-results" id="noResults">No rentals found in this category yet. Check back soon!</p>
+</section>
+
+<footer>
+  &copy; <span id="year"></span> Ministry of Tourism, Government of India — Explore North India
+</footer>
+
+<script>
+/* ============================================================
+   DYNAMIC DATA — edit these arrays to change page content.
+   Drop matching image files into the /images folder.
+   ============================================================ */
+
+const navItems = [
+  {label:"Home", href:"bhraman_home.html"},
+  {label:"Adventures", href:"bhraman_adventures.html"},
+  {label:"Rentals", href:"bhraman_rentals.html"},
+  {label:"Parking", href:"bhraman_parking.html"},
+  {label:"Guides", href:"guides.html"},
+  {label:"About", href:"about.html"},
+  {label:"FAQ", href:"faq.html"}
+];
+const currentPage = "rentals";
+
+const categories = ["All","Bikes","Cars","Camping Gear","Trekking Gear","Winter Gear"];
+
+const rentals = [
+  {
+    name:"Royal Enfield Himalayan",
+    category:"Bikes",
+    availability:"Available",
+    location:"Manali, Himachal Pradesh",
+    unit:"per day",
+    price:"₹1,800",
+    specs:["411cc","ABS","Helmet Included"],
+    image:"images/Himalyan_RE.jpg",
+    desc:"Purpose-built for mountain roads, with long-travel suspension and a comfortable upright riding position."
+  },
+  {
+    name:"Mahindra Thar 4x4",
+    category:"Cars",
+    availability:"Limited",
+    location:"Leh, Ladakh",
+    unit:"per day",
+    price:"₹4,500",
+    specs:["4x4 Drive","5-Seater","Diesel"],
+    image:"images/Thar.jpg",
+    desc:"A rugged off-roader built for high-altitude passes and unpaved mountain trails around Ladakh."
+  },
+  {
+    name:"2-Person Alpine Tent",
+    category:"Camping Gear",
+    availability:"Available",
+    location:"Rishikesh, Uttrakhand",
+    unit:"per day",
+    price:"₹350",
+    specs:["Waterproof","2 Person","Includes Poles"],
+    image:"images/2p_tent.jpg",
+    desc:"Lightweight, wind-resistant tent ideal for riverside or high-altitude campsites."
+  },
+  {
+    name:"Trekking Pole Set (Pair)",
+    category:"Trekking Gear",
+    availability:"Available",
+    location:"Manali, Himachal Pradesh",
+    unit:"per trek",
+    price:"₹150",
+    specs:["Adjustable","Carbon Fiber","Pair of 2"],
+    image:"images/treking_poles.webp",
+    desc:"Collapsible carbon-fiber poles that reduce knee strain on steep Himalayan descents."
+  },
+  {
+    name:"Ski Set (Skis + Boots + Poles)",
+    category:"Winter Gear",
+    availability:"Limited",
+    location:"Gulmarg, J&K",
+    unit:"per day",
+    price:"₹1,200",
+    specs:["All Sizes","Boots Included","Helmet Optional"],
+    image:"images/Ski Set (Skis + Boots + Poles).jpg",
+    desc:"Full ski kit for Gulmarg's slopes, fitted on-site for beginners through advanced skiers."
+  },
+  {
+    name:"Toyota Innova Crysta",
+    category:"Cars",
+    availability:"Available",
+    location:"Srinagar, J&K",
+    unit:"per day",
+    price:"₹3,200",
+    specs:["7-Seater","Driver Optional","Diesel"],
+    image:"images/Toyota Innova Crysta.jpg",
+    desc:"Spacious and comfortable for family trips across valley roads, with optional driver service."
+  },
+  {
+    name:"Hero Xpulse 200",
+    category:"Bikes",
+    availability:"Available",
+    location:"Gangtok, Sikkim",
+    unit:"per day",
+    price:"₹1,400",
+    specs:["200cc","Dual Sport","Helmet Included"],
+    image:"images/Hero Xpulse 200.avif",
+    desc:"A light and agile dual-sport bike suited to Sikkim's winding mountain roads."
+  },
+  {
+    name:"4-Person Family Tent",
+    category:"Camping Gear",
+    availability:"Available",
+    location:"Pahalgam, J&K",
+    unit:"per day",
+    price:"₹550",
+    specs:["Waterproof","4 Person","Vestibule Storage"],
+    image:"images/4-Person Family Tent.jpg",
+    desc:"Roomy tent with a covered vestibule, ideal for families camping near Pahalgam's meadows."
+  },
+  {
+    name:"Down Jacket & Snow Boots Kit",
+    category:"Winter Gear",
+    availability:"Unavailable",
+    location:"Auli, Uttrakhand",
+    unit:"per day",
+    price:"₹600",
+    specs:["-15°C Rated","All Sizes","Gloves Included"],
+    image:"images/Down Jacket & Snow Boots Kit.avif",
+    desc:"Cold-rated jacket and insulated boots for sub-zero treks and snow activities."
+  }
+];
+
+/* ============================================================
+   ICONS
+   ============================================================ */
+function pinSVG(){
+  return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>`;
+}
+function tagSVG(){
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .59 1.41l9.58 9.58a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.82z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>`;
+}
+
+/* ============================================================
+   RENDER: NAV
+   ============================================================ */
+function renderNav(){
+  const ul = document.getElementById('navList');
+  ul.innerHTML = navItems.map(item =>
+    `<li><a href="${item.href}" class="${item.label.toLowerCase()===currentPage ? 'active' : ''}">${item.label}</a></li>`
+  ).join('');
+}
+
+/* ============================================================
+   RENDER: FILTER BAR
+   ============================================================ */
+let activeCategory = "All";
+
+function renderFilters(){
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML = categories.map(cat =>
+    `<button class="filter-btn ${cat===activeCategory ? 'active':''}" data-cat="${cat}">${cat}</button>`
+  ).join('');
+
+  bar.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      renderFilters();
+      renderRentals();
+    });
+  });
+}
+
+/* ============================================================
+   SORTING
+   ============================================================ */
+function priceToNumber(priceStr){
+  return parseInt(priceStr.replace(/[^\d]/g, ''), 10) || 0;
+}
+
+document.getElementById('sortSelect').addEventListener('change', renderRentals);
+
+/* ============================================================
+   RENDER: RENTAL CARDS
+   ============================================================ */
+function renderRentals(){
+  const grid = document.getElementById('rentalGrid');
+  const noResults = document.getElementById('noResults');
+  const resultCount = document.getElementById('resultCount');
+  const sortValue = document.getElementById('sortSelect').value;
+
+  let list = activeCategory === "All"
+    ? [...rentals]
+    : rentals.filter(r => r.category === activeCategory);
+
+  if(sortValue === "price-low") list.sort((a,b) => priceToNumber(a.price) - priceToNumber(b.price));
+  if(sortValue === "price-high") list.sort((a,b) => priceToNumber(b.price) - priceToNumber(a.price));
+  if(sortValue === "name") list.sort((a,b) => a.name.localeCompare(b.name));
+
+  resultCount.textContent = `${list.length} rental${list.length !== 1 ? 's' : ''} found`;
+
+  if(!list.length){
+    grid.innerHTML = "";
+    noResults.style.display = "block";
+    return;
+  }
+  noResults.style.display = "none";
+
+  grid.innerHTML = list.map(r => {
+    const availClass = r.availability.toLowerCase();
+    const disabled = r.availability === "Unavailable" ? "disabled" : "";
+    const btnLabel = r.availability === "Unavailable" ? "Unavailable" : "Rent Now";
+    return `
+    <article class="rental-card">
+      <div class="img-wrap">
+        <img src="${r.image}" alt="${r.name}" onerror="this.parentElement.style.background='#a9c6d8'; this.remove()">
+        <div class="cat-tag">${r.category}</div>
+        <div class="avail-badge ${availClass}">${r.availability}</div>
+      </div>
+      <div class="content">
+        <h3>${r.name}</h3>
+        <div class="rent-meta">
+          <span>${pinSVG()} ${r.location}</span>
+        </div>
+        <p class="desc">${r.desc}</p>
+        <div class="specs">
+          ${r.specs.map(s => `<span class="spec-pill">${s}</span>`).join('')}
+        </div>
+        <div class="rental-footer">
+          <div class="price">${r.price}<span> / ${r.unit.replace('per ','')}</span></div>
+          <button class="rent-btn" data-name="${r.name}" ${disabled}>${btnLabel}</button>
+        </div>
+      </div>
+    </article>
+  `}).join('');
+
+  grid.querySelectorAll('.rent-btn:not([disabled])').forEach(btn => {
+    btn.addEventListener('click', () => {
+      alert(`Rental request started for: ${btn.dataset.name}\n(Connect this button to your booking/payment system.)`);
+    });
+  });
+}
+
+/* ============================================================
+   MOBILE MENU
+   ============================================================ */
+document.getElementById('burgerBtn').addEventListener('click', () => {
+  const nav = document.getElementById('mainNav');
+  nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.getElementById('year').textContent = new Date().getFullYear();
+renderNav();
+renderFilters();
+renderRentals();
+</script>
+
+</body>
+</html>
